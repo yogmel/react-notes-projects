@@ -43,4 +43,7 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
     - props
     - Method binding
     - Component State
+    - Stateless Functional Component
+    - Life cycle methods
+    
     
