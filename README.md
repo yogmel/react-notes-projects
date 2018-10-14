@@ -31,7 +31,7 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
 --------
 
 
-### Conteúdo React
+### Conteúdo
 - JSX expressions
     - Template
     - {}
@@ -44,9 +44,11 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
     - Method binding
     - Component State
     - Stateless Functional Component
-    - Life cycle methods
+    - Life cycle methods (componentDidMount, componentDidUpdate, render)
     
 
 - Webpack
     - import and export
-    
+    - import and export as default
+    - import npm modules
+    - setup babel
