@@ -52,3 +52,6 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
     - import and export as default
     - import npm modules
     - setup babel
+    - Source maps
+    - Dev server
+    
