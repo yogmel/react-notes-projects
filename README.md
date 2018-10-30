@@ -33,25 +33,33 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
 
 ### Conteúdo
 - JSX expressions
-    - Template
-    - {}
-    - Conditions
+  - Template
+  - {}
+  - Conditions
 
 
 - React
-    - Components
-    - props
-    - Method binding
-    - Component State
-    - Stateless Functional Component
-    - Life cycle methods (componentDidMount, componentDidUpdate, render)
+  - Components
+  - props
+  - Method binding
+  - Component State
+  - Stateless Functional Component
+  - Life cycle methods (componentDidMount, componentDidUpdate, render)
+  - Third-party:
+    - React-Router
+    - React-Modal
     
 
 - Webpack
-    - import and export
-    - import and export as default
-    - import npm modules
-    - setup babel
-    - Source maps
-    - Dev server
+  - import and export
+  - import and export as default
+  - import npm modules
+  - setup babel
+  - Source maps
+  - Dev server
     
+
+- Redux
+    - Action
+      - dispatch()
+      - subscribe()
