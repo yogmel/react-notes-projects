@@ -63,3 +63,7 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
     - Action
       - dispatch()
       - subscribe()
+    - Reducers
+    - Store
+      - createStore()
+      - combineReducers()
