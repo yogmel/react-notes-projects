@@ -44,6 +44,7 @@ export default class IndecisionApp extends React.Component {
     this.setState(() => ({ selectedOption: undefined }))
   }
 
+
   componentDidMount() {
     try {
       const json = localStorage.getItem('options')
@@ -52,6 +53,7 @@ export default class IndecisionApp extends React.Component {
       if(options){
         this.setState(() => ({ options }))
       }
+      
     } catch (e) {
       // DO nothing at all
     }
