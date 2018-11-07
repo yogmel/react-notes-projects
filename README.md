@@ -67,3 +67,22 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
     - Store
       - createStore()
       - combineReducers()
+    - Selectors
+    - Third-party:
+      - React-Redux
+      - Redux Dev Tools
+
+
+- Testing: Jest
+  - test()
+  - expect()
+  - comparing methods: toEqual(), toBe()
+  - React testing:
+    - react-test-renderer/shallow
+    - Snapshot testing
+
+
+- Third-party libraries
+  - moment.js
+  - Airbnb Date Picker
+
