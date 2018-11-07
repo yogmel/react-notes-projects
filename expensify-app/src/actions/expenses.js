@@ -6,7 +6,8 @@ export const addExpense = ({
   note = '',
   amount = 54500,
   createdAt = 0
-}) => ({
+} = {}
+) => ({
   type: 'ADD_EXPENSE', // define Redux type
   expense: { // define changes of state
     id: uuid(),
