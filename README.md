@@ -80,9 +80,9 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
   - React testing:
     - react-test-renderer/shallow
     - Snapshot testing
+  - Enzyme
 
 
 - Third-party libraries
   - moment.js
   - Airbnb Date Picker
-
