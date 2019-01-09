@@ -86,3 +86,10 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
 - Third-party libraries
   - moment.js
   - Airbnb Date Picker
+
+
+- Production setup:
+  - Webpack to production
+  - Separating CSS from .js file
+  - Production web server with Express
+  - Deploying with Heroku
