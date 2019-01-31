@@ -458,3 +458,39 @@ class Options extends React.Component {
 
 > Quando chamar os métodos da mãe e quando declarar métodos dentro do próprio componente? Se houver a necessidade de tratar dados dentro do próprio componente, a melhor opção é declarar o método dentro dele mesmo.
 
+-----------------
+
+### Stateless Functional Components
+
+Alguns componentes são mais "simples", não possuem state, métodos etc. Pra esses componentes, podemos declará-los de forma única:
+
+```javascript
+const Action = (props) => (
+  <div>
+    <button
+      onClick={props.handlePick}
+      disabled={!props.hasOptions}
+    >
+      What should I do?
+    </button>
+  </div>
+)
+```
+
+### React Dev Tools
+
+As ferramentas de desenvolvedor do React oferece maneiras de visualizar states, props e componentes.
+
+- [Chrome React Dev Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+- [Firefox React Dev Tools](https://addons.mozilla.org/pt-BR/firefox/addon/react-devtools/)
+
+
+### Lifecycle Methods
+React possui alguns métodos prontos que são ativados antes ou depois de algum evento. Eles só existe em componentes baseados em Classes, então não existem em Stateless Functional Components.
+- _componentDidMount()_: é ativado quando o componente é criado no DOM.
+- _componentDidUpdate(prevProps, prevState)_: é ativado depois que um state ou props é alterado. Os argumentos passados podem ser os states e props anteriores.
+- _componentWillUnmount()_: ativado logo antes do componente desaparecer, quando uma página alterar etc.
+
+
+
+
