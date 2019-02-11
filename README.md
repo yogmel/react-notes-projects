@@ -491,6 +491,140 @@ React possui alguns métodos prontos que são ativados antes ou depois de algum 
 - _componentDidUpdate(prevProps, prevState)_: é ativado depois que um state ou props é alterado. Os argumentos passados podem ser os states e props anteriores.
 - _componentWillUnmount()_: ativado logo antes do componente desaparecer, quando uma página alterar etc.
 
+-----------
 
+## Webpack
+Webpack nos permite organizar nossos arquivos e otimiza nossa aplicação. Ele recebe todos os arquivos e retorna um pacote (bundle).
 
+Webpack nos permite usar o Babel e outros loaders, antes de compilar e criar o bundle.
+
+### Instalar Webpack
+
+Instalar:
+```
+yarn add webpack
+```
+
+Run:
+```javascript
+webpack
+// ou 
+webpack --watch
+```
+
+### Webpack.config.js
+Criar um arquivo chamado webpack.config.js no root, para determinar configurações.
+
+```javascript
+// entry -> output. Entry são os arquivos de entrada e output é o caminho do bundle que vai ser criado
+
+const path = require('path'); // necessário para pegar o caminho do arquivo, independente se estiver local ou no servidor
+
+module.exports = {
+  entry: './src/app.js',
+  output: {
+    path: path.join(__dirname, 'public'),
+    filename: 'bundle.js'
+  }
+};
+
+```
+
+#### Import e Export
+É possível exportar e importar scripts específicos em javascript.
+
+**Named export**
+```javascript
+// utils.js
+
+const square = (x) => x * x;
+// ou export const square = (x) => x * x;
+
+const add = (a, b) => a + b;
+// ou export const add = (a, b) => a + b;
+
+export { square, add };
+
+// add.js
+import { square, add } from './utils.js'; // os nomes tem que ser iguais ao export
+```
+
+**Default Export**: somente 1 default export por script e na hora de importar, não é necessário usar o mesmo nome do export.
+```javascript
+// utils.js
+const subtract = (a,b) => a - b;
+// ou export default (a,b) => a - b;
+
+export { subtract as default };
+
+// add.js
+import subtractFunction from './utils.js';
+```
+
+#### Loaders
+Para configurar um ambiente para React, devemos instalar os loaders Babel.
+```
+yarn add babel-core babel-loader
+```
+
+No arquivo webpack.config.js:
+```javascript
+module.exports = {
+  //...
+  },
+  module: {
+    rules: [{
+      loader: 'babel-loader',
+      test: /\.js$/, // em quais arquivos esse loader vai rodar?
+      exclude: /node_modules/ // quais arquivos esse loader vai ignorar?
+    }]
+  }
+};
+```
+Com a configuração feita no Webpack, precisamos iniciar os scripts do Babel em outro lugar. Deve-se criar um arquivo chamado _.babelrc_ que vai guardar todas as configurações.
+```javascript
+{
+  "presets": [
+    "env",
+    "react"
+  ]
+}
+```
+
+#### Source Maps
+Source maps são usados para debug, como uma tradução do código compilado para o código fonte.
+Ver a documentação do Webpack para saber quais Source maps estão disponíveis. Alguns são bons para produção e outros para desenvolvimento (nível de detalhe vs. tempo de build)
+
+```javascript
+module.exports = {
+  //...
+  },
+  devtool: 'cheap-module-eval-source-map'
+};
+```
+
+#### Webpack Dev Server
+Para instalar:
+```
+yarn add webpack-dev-server
+```
+Configuração (mais na documentação):
+```javascript
+module.exports = {
+  //...
+  },
+  devServer: {
+    contentBase:  path.join(__dirname, 'public') // local de onde o servidor vai pegar os arquivos
+  }
+};
+```
+
+Run:
+```
+webpack-web-server
+```
+
+Webpack Web Server não cria um bundle enquanto roda, apenas usa a memória do computador. 
+
+--------
 
