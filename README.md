@@ -624,7 +624,72 @@ Run:
 webpack-web-server
 ```
 
-Webpack Web Server não cria um bundle enquanto roda, apenas usa a memória do computador. 
+Webpack Web Server não cria um bundle enquanto roda, apenas usa a memória do computador.
+
+
+
 
 --------
 
+## React Avançado
+### React Children
+É possível passar _children_ dentro de componentes. Ao invés de chamar um Componente autofechante, se abrir e fechar uma tag desse componente, tudo que está dentro dele vira `props.children`.
+
+[Artigo referência - React avançado — Utilizando “props.children” como função de primeira classe](https://medium.com/@oieduardorabelo/react-avan%C3%A7ado-utilizando-props-children-como-fun%C3%A7%C3%A3o-de-primeira-classe-f6be8acdfaf1)
+
+```jsx
+const Layout = (props) => (
+  <div>
+    <h1>Header</h1>
+    {props.children} 
+  </div>
+)
+
+ReactDOM.render(
+  (<Layout>
+    <p>Isso é uma descrição que é passado como props.children</p>
+  </Layout>),
+  document.getElementById('app')
+)
+```
+
+### Instalando Third-Party libs
+#### React-Modal
+[Documentação Oficial](https://github.com/reactjs/react-modal)
+
+Para instalar, é só seguir a documentação oficial:
+```
+$ npm install react-modal
+$ yarn add react-modal
+```
+
+Dentro do componente que for utilizar, chamar como importação e chamar seu componente com `props`:
+```JSX
+import Modal from 'react-modal';
+
+const ModalBox = () => {
+  <Modal
+    isOpen={}
+    contentLabel="Algum conteúdo"
+  >
+    <h3>Um conteúdo</h3>
+  </Modal>
+}
+
+```
+
+### Retorno implícito de JSX
+Se o _stateless component_ não possui uma lógica, variáveis ou outros elemnentos, a não ser o retorno de um JSX, então há uma maneira mais simples de escrever:
+
+```JSX
+const Template = () => {
+  return (
+    <div>Retorno explícito</div>
+  )
+}
+
+const TemplateDois = () => (
+  <div>Retorno implícito. Também posso receber props.</div>
+)
+
+```
