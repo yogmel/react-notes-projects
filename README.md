@@ -31,7 +31,7 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
 
 
 ### Conteúdo
-- JSX expressions
+- [JSX expressions](#JSX)
   - Template
   - {}
   - Conditions
@@ -108,7 +108,9 @@ yarn install react react-dom
 ```
 yarn install --save-dev @babel/preset-react
 ```
-**JSX**: javascript expressions. Foi criado pelos desenvolvedores do React e são usados antes de ser compilado para um ECMAScript oficial. Ele permite que markups em HTML sejam compilados a partir de códigos em Javascript.Para que seja compilado, deve haver apenas um elemento direto, se não não funciona.
+
+## JSX
+Ou javascript expressions. Foi criado pelos desenvolvedores do React e são usados antes de ser compilado para um ECMAScript oficial. Ele permite que markups em HTML sejam compilados a partir de códigos em Javascript.Para que seja compilado, deve haver apenas um elemento direto, se não não funciona.
 
 Exemplo:
 ```javascript
