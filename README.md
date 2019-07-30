@@ -627,8 +627,35 @@ webpack-web-server
 Webpack Web Server não cria um bundle enquanto roda, apenas usa a memória do computador.
 
 
+#### Style Loaders
+Para que se possa importar folhas de estilo dentro dos componentes em React, precisamos de pacotes para interpretar CSS dentro de arquivos Javascript.
 
+Para isso, devemos instalar o `css-loader`. Adicionalmente, podemos instalar outro pacote que insere esses estilos dentro da tag `<head>` do HTML, que é o pacote `style-loader`.
 
+Para instalar:
+```
+npm install --save-dev css-loader style-loader
+```
+Esses serão os _loaders_ que usaremos no Webpack. Caso queira utilizar o SASS, também há a necessidade de instalar o `sass-loader`.
+```
+npm install --save-dev sass-loader
+```
+
+Agora, temos que chamar esses _loaders_ na hora de compilar a nossa aplicação, dentro do `webpack.config.js`, dentro da propriedade `rules` do objeto `module`. Temos que ter a propriedade `test` para especificar que tipo de arquivo passará por esse _loader_ e que qual loader será ativado estará especificado no `use`.
+
+Para mais informações sobre Webpack modules, ver a [documentação oficial](https://webpack.js.org/configuration/module/).
+```javascript
+module: {
+    rules: [{
+      test: /\.s?css$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+      ]
+    }]
+  }
+```
 --------
 
 ## React Avançado
@@ -693,3 +720,9 @@ const TemplateDois = () => (
 )
 
 ```
+
+
+-----------
+
+
+## React Router
