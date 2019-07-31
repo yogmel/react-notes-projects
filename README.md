@@ -25,38 +25,35 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
 <script src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
 ```
-
-
 --------
-
-
 ### Conteúdo
 - [JSX expressions](#JSX)
   - Template
   - {}
   - Conditions
 
-
-- React
-  - Components
-  - props
+- [React](#React)
+  - [Components](#Componentes-em-React)
+  - [props](#Props)
   - Method binding
-  - Component State
-  - Stateless Functional Component
-  - Life cycle methods (componentDidMount, componentDidUpdate, render)
+  - [State](#State)
+  - [Stateless Functional Component](#Stateless-Functional-Components)
+  - [Life cycle methods](#Lifecycle-Methods) (componentDidMount, componentDidUpdate, render)
   - Third-party:
-    - React-Router
-    - React-Modal
+    - [React-Modal](#React-Modal)
     
+- [React Avançado](#React-Avançado)
+  - [React children](#React-Children)
+  - [Retorno implícito de JSX](#Retorno-implícito-de-JSX)
 
-- Webpack
-  - import and export
-  - import and export as default
-  - import npm modules
-  - setup babel
-  - Source maps
-  - Dev server
+- [Webpack](#Webpack)
+  - [Import and Export](#Import-e-Export)
+  - [Loaders](#Loaders)
+  - [Source maps](#source-maps)
+  - [Dev server](#webpack-dev-server)
+  - [Style Loaders](#Style-Loaders)
     
+- [React Router](#React-Router)
 
 - Redux
     - Action
@@ -658,6 +655,8 @@ module: {
     }]
   }
 ```
+> Ao final da configuração de todo o ambiente, é recomendado que se salve um arquivo com esse esqueleto. Na programação, isso se chama **boilderplate**, uma estrutura que é usada extensivamente, mas é pouco modificada entre aplicações.
+
 --------
 
 ## React Avançado
@@ -722,9 +721,191 @@ const TemplateDois = () => (
 )
 
 ```
-
-
 -----------
-
-
 ## React Router
+### Client side vs. Server side rendering
+A maneira como carregamos os nossos sites e aplicações podem ser feitas, a grosso modo, de duas formas. Primeiro, a mais antiga forma o  _Server-Side Rendering_ ou SSR, o site é renderizado, ou criado, dentro do servidor e envia para o cliente (ou navegador) o site já pronto, com o HTML, CSS e Javascript finais para aquela página. Na segunda forma, o _Client-Side Rendering_ ou CSR, todo o conteúdo do site é carregado na primeira vez que o usuário entra e as outras páginas são montadas seguindo uma lógica montada no Javascript, usando as informações armazenadas no cliente.
+
+Em resumo, algumas características, vantagens e desvantagens:
+
+**Server-side rendering**
+- A renderização do site acontece dentro do servidor e ele envia o produto final, ou o HTML pronto para o cliente;
+- Sua renderização inicial é mais rápida, porque não carrega todo conteúdo na primeira vez que é chamado;
+- Quando há mudança de rota, ele tem que repetir o processo de novo;
+- O SSR também é mais SEO-friendly do que o CSR. Por esse motivo, é ótimo para sites estáticos.
+
+**Client-side rendering**
+- Frameworks usam, ótimo para web applications, pois possibilita a interação com o usuário através de Javascript;
+- É SEO-friendly, se for implementado de forma correta, já que o Google consegue "ler" Javascript;
+- Carrega todos os recursos de Javascript no momento em que inicia;
+- É rápido depois da primeira chamada, pois não necessita da requisição contínua com o servidor;
+- Usa apenas um index.html.
+
+O _React Router_ é uma biblioteca suporte ao React que auxilia na criação de rotas usando o _Client-side Rendering_, já que o React é uma biblioteca para _Single page applications_ e não possui múltiplas páginas .html para renderizar seu conteúdo.
+
+### Instalação
+```
+npm add react-router-dom
+```
+
+### Uso
+#### BrowserRouter e Route
+Para fazer uso básico do React Router, precisamos especificar que parte do código deve ser lida como um Router ([`BrowserRouter`](https://reacttraining.com/react-router/web/api/BrowserRouter)) e definir as rotas propriamente ditas ([`Route`](https://reacttraining.com/react-router/web/api/Route)).
+```JSX
+import React from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Dashboard from './Dashboard';
+import Profile from './Profile';
+
+const router = (
+  <BrowserRouter>
+    <Route path="/" exact component={Dashboard} />
+    <Route path="/profile" component={Profile} />
+  </BrowserRouter>
+)
+```
+
+O `<BrowserRoute>` não renderiza nada visível. Ao invés disso, ele cria as rotas que especificamos dentro dele.
+
+As propriedades do `<Route>` são `path`, qual URL e `component`, qual componente será renderizado, assim que o usuário entrar nessa URL.
+
+No primeiro `<Route>`, há a necessidade de usarmos o `exact`, para que ele renderize somente se a rota for exatamente como especificado na propriedade `path`. Isso porque o segundo `path` também contém o `/`.
+
+**Configurando o Webpack Dev Server**
+
+Caso esteja usando o Webpack Dev Server, também há a necessidade de dizer para o servidor que estamos usando o CSR, não SSR. Para isso, devemos inserir no `webpack.config.js` a seguinte especificação:
+``` javascript
+// ...
+devServer: {
+  contentBase: path.join(__dirname, 'public'),
+  historyApiFallback: true
+}
+```
+
+O [historyApiFallback](https://webpack.js.org/configuration/dev-server/#devserverhistoryapifallback) faz com que todas as rotas apontem para o `index.html`, ao invés da rota especificada pelo navegador.
+
+#### Switch
+Caso desejarmos inserir uma página 404, podemos inserir uma nova rota, sem especificação do `path`. O problema disso é que esse componente é renderizado em todas as ocasiões. Para resolver esse problema, usamos o componente `<Switch>`. Ele lê as `<Route>` de cima para baixo e renderiza apenas **um** componente, aquele que primeiro combinar com `path`.
+
+A diferença entre o `<Route>` e o `<Switch>` é que o primeiro renderiza componentes inclusivamente e o segundo de forma exclusiva.
+
+
+```JSX
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Dashboard from './Dashboard';
+import Profile from './Profile';
+import NotFound from './NotFound';
+
+const router = (
+  <BrowserRouter>
+    <Switch>
+      <Route path="/" exact component={Dashboard} />
+      <Route path="/profile" component={Profile} />
+      <Route component={NotFound} /> 
+    </Switch>
+  </BrowserRouter>
+)
+```
+
+#### Link e NavLink
+Configuramos as rotas, porém não existe maneira de navegar para elas, a não ser manualmente inserindo na barra de navegação. Conseguimos criar conexões, ou links com o React Router.
+
+```JSX
+import React from 'react';
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import Dashboard from './Dashboard';
+import Profile from './Profile';
+
+const NotFound = () => (
+  <div>
+    404 - <Link to="/">Ir para a Home</Link>
+  </div>
+)
+
+const router = (
+  <BrowserRouter>
+    <Switch>
+      <Route path="/" exact component={Dashboard} />
+      <Route path="/profile" component={Profile} />
+      <Route component={NotFound} /> 
+    </Switch>
+  </BrowserRouter>
+)
+```
+
+O [`<Link>`](https://reacttraining.com/react-router/web/api/Link) é um componente que precisa de uma propriedade, que é o `to`. Ele determina a rota para a qual o usuário vai entrar, ao clicar nessa âncora.
+
+Alternativamente, o [`<NavLink>`](https://reacttraining.com/react-router/web/api/NavLink) é um componente que possui a mesma funcionalidade do `<Link>`, porém com uma diferença: é possível mudar o estilo do link, se o caminho é o mesmo da rota para o qual ele aponta. Para isso, usamos a propriedade `activeClassName`. Quando isso acontecer, o link terá a classe especificada.
+
+```JSX
+const Header = () => (
+  <NavLink to="/" activeClassName="is-active">Dashboard</NavLink>
+  <NavLink to="/create" activeClassName="is-active">Create Expense</NavLink>
+  <NavLink to="/edit" activeClassName="is-active">Edit Expense</NavLink>
+)
+```
+
+#### Organizando rotas
+É comum separar rotas, assim como fazemos com componentes. Uma sugestão de estrutura é `/src/routers/AppRouter.js` e inserir todos as rotas lá. Lembrar de importar as devidas bibliotecas e componentes para que o aplicativo funcione.
+
+```JSX
+// AppRouter.js
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Dashboard from './Dashboard';
+import Profile from './Profile';
+import NotFound from './NotFound';
+
+const AppRouter = (
+  <BrowserRouter>
+    <Switch>
+      <Route path="/" exact component={Dashboard} />
+      <Route path="/profile" component={Profile} />
+      <Route component={NotFound} /> 
+    </Switch>
+  </BrowserRouter>
+)
+
+export default AppRouter;
+```
+
+```JSX
+// app.js
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import AppRouter from './routers/AppRouter';
+
+ReactDOM.render(<AppRouter />, document.getElementById('app'));
+```
+
+#### Query e URL Params
+Quando usamos React Router para renderizar um componente, ele passa `props` várias informações sobre localização, histórico, _queries_ etc, além de métodos úteis como `goForward()` e `replace()`.
+
+Para ver quais URL Params estão disponíveis, ver a documentação oficial:
+- [history](https://reacttraining.com/react-router/web/api/history);
+- [match](https://reacttraining.com/react-router/web/api/match).
+
+Se, por exemplo, queremos renderizar a página de acordo com um `id`, a sintaxe é `:id`.
+
+```JSX
+// AppRouter.js
+
+// ...
+
+const AppRouter = (
+  <BrowserRouter>
+    <Switch>
+      {
+        // ...
+      }
+      <Route path="/edit/:id" component={EditExpense} />
+    </Switch>
+  </BrowserRouter>
+)
+
+export default AppRouter;
+```
+
+Nesse caso, estamos passando uma nova propriedade para o componente `<EditExpense>`, o `id`. Para acessar essa propriedade dentro do componente, usamos `props.match.params.id`.
