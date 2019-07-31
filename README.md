@@ -54,6 +54,12 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
   - [Style Loaders](#Style-Loaders)
     
 - [React Router](#React-Router)
+  - [Client side vs. Server side rendering](#Client-side-vs.-Server-side-rendering)
+  - [BrowserRouter e Route](#BrowserRouter-e-Route)
+  - [Switch](#Switch)
+  - [Link e NavLink](#Link-e-NavLink)
+  - [Organizando rotas](#Organizando-rotas)
+  - [Query e URL Params](#Query-e-URL-Params)
 
 - Redux
     - Action
