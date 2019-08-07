@@ -915,3 +915,160 @@ export default AppRouter;
 ```
 
 Nesse caso, estamos passando uma nova propriedade para o componente `<EditExpense>`, o `id`. Para acessar essa propriedade dentro do componente, usamos `props.match.params.id`.
+
+
+-----------
+
+## Redux
+React não permite o compartilhamento de `states` entre componentes, pois eles são privados. Além disso, em uma cadeia grande de componentes, é necessário passar as `props` obrigatórias para todos da herança.
+
+
+Nesses casos, precisamos de um **administrador de states** e é isso que o Redux faz. Ele guarda os `states` em uma `store` que é acessível a todos os componentes da aplicação. Eles podem escrever e acessar esses estados.
+
+### Instalação
+[Documentação Oficial - Redux](https://redux.js.org/)
+```
+yarn add redux
+```
+
+
+### Uso
+#### Create Store
+- [Documentação Oficial - createStore](https://redux.js.org/api/createstore)
+
+- [Store](https://redux.js.org/api/store#store)
+
+Primeiro, é preciso criar o container onde serão guardados os estados. Para isso, criaremos a constante _store_. Existe apenas **uma store** por aplicação.
+```JSX
+import { createStore } from 'redux';
+
+const store = createStore(( state = { count: 0 } ) => {
+  return state;
+})
+```
+
+O `createStore` cria a _store_, recebendo como parâmetro um _reducer_, que é uma função que retorna a próxima árvore de estados e as _actions_. Ele também pode receber o estado anterior e um _enhancer_.
+```javascript
+createStore(reducer, [preloadedState], [enhancer])
+```
+
+#### Actions e dispatch
+- [Action](https://redux.js.org/glossary#action)
+- [dispatch()](https://redux.js.org/api/store#dispatchaction)
+
+Criamos a _store_, porém não há como fazer alterações ainda nos estados dentro dela. Para isso, definimos ações, ou _actions_. Declaramos essas ações dentro da store. Por convenção, o nome das ações são em letra maiúscula e as palavras são separadas por `_` (underscore).
+
+
+```JSX
+// ...
+
+const store = createStore(( state = { count: 0 }, action ) => {
+  switch(action.type) {
+    case 'INCREMENT':
+      return {
+        count: state.count + 1
+      }
+    case 'DECREMENT':
+      return {
+        count: state.count - 1
+      }
+    default:
+      return state
+  }
+})
+```
+
+E para acionarmos essa ação, usamos o método do objeto `Store`, `dispatch`:
+```JSX
+// ...
+
+store.dispatch({
+  type: 'INCREMENT'
+})
+
+store.dispatch({
+  type: 'DECREMENT'
+})
+```
+
+É possível também enviar uma propriedade que define outras características da ação. É só enviar como uma propriedade adicional do objeto do `dispatch`.
+```JSX
+// ...
+
+store.dispatch({
+  type: 'INCREMENT',
+  incrementarEm: 4
+})
+```
+Na `store`, é preciso especificar como essa propriedade será utilizada.
+
+```JSX
+// ...
+
+const store = createStore(( state = { count: 0 }, action ) => {
+  switch(action.type) {
+    case 'INCREMENT':
+      const incrementarEm = typeof action.incrementarEm === 'number' ? action.incrementarEm : 1
+      return {
+        count: state.count + incrementarEm
+      }
+    // ...
+  }
+})
+
+// ...
+```
+
+Para debugar e inserir uma ação a cada atualização, podemos usar os métodos `subscribe()` e `getState()`.
+- [subscribe()](https://redux.js.org/api/store#subscribelistener)
+- [getState()](https://redux.js.org/api/store#getState)
+
+O `subscribe()` é um método que recebe como parâmetro uma função, que será acionada a cada vez que houver um `dispatch`.
+
+O `getState()` é um método que retorna o estado atual da aplicação.
+
+Para parar o `subscribe()`, é só chamar a função em que foi declarada. No exemplo, é a função `atualizar()`.
+
+```JSX
+const atualizar = store.subscribe(() => {
+  console.log(store.getState())
+})
+
+store.dispatch({
+  type: 'INCREMENT'
+})
+
+// Object {count: 1}
+
+store.dispatch({
+  type: 'DECREMENT'
+})
+
+// Object {count: 1}
+
+atualizar()
+
+store.dispatch({
+  type: 'INCREMENT'
+})
+
+// não retorna nada. Apesar de haver modificação no store, houve a chamada do atualizar() para para com as atualizações do subscribe()
+
+```
+
+
+
+#### Glossário
+##### State
+##### Action
+Objeto que representa a inteção de alterar um _state_. _Action_ é a única forma de alterar dados na _store_. _Actions_ precisam de uma propriedade `type` para indicar qual ação ocorrerá. É recomendado usar uma `String` para o `type`.
+
+_Actions_ são declaradas dentro da _store_, dentro do _reducing function_.
+
+##### Reducer
+##### Dispatching Function
+##### Action Creator
+
+
+##### Store e Store Creator
+Objeto que que guarda o _state_ ou o _state tree_ da aplicação. Para criar uma _store_, é necessário chamar a função `createStore`, que recebe um _reducer_ como parâmetro. 
