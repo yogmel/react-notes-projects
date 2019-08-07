@@ -1019,6 +1019,31 @@ const store = createStore(( state = { count: 0 }, action ) => {
 // ...
 ```
 
+##### Organizando Actions
+Ao invés chamar o `dispatch()` e passar uma função inline, é recomendado criar uma função que guardará a ação.
+
+```JSX
+const incrementarValor = ({ incrementarEm = 1 } = {}) => ({
+  type: 'INCREMENT',
+  incrementarEm // se a variável e o nome da propriedade são iguais, é possível atualizar o valor de forma implícita
+})
+
+const store = createStore(( state = { count: 0 }, action ) => {
+  switch(action.type) {
+    case 'INCREMENT':
+      return {
+        count: state.count + action.incrementarEm
+      }
+    // ...
+  }
+})
+
+store.dispatch(incrementarValor(5))
+store.dispatch(incrementarValor())
+```
+
+
+#### subscribe() e getState()
 Para debugar e inserir uma ação a cada atualização, podemos usar os métodos `subscribe()` e `getState()`.
 - [subscribe()](https://redux.js.org/api/store#subscribelistener)
 - [getState()](https://redux.js.org/api/store#getState)
