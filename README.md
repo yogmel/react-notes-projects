@@ -933,7 +933,7 @@ yarn add redux
 
 
 ### Uso
-#### Create Store
+### Create Store
 - [Documentação Oficial - createStore](https://redux.js.org/api/createstore)
 
 - [Store](https://redux.js.org/api/store#store)
@@ -952,7 +952,7 @@ O `createStore` cria a _store_, recebendo como parâmetro um _reducer_, que é u
 createStore(reducer, [preloadedState], [enhancer])
 ```
 
-#### Actions e dispatch
+### Actions e dispatch
 - [Action](https://redux.js.org/glossary#action)
 - [dispatch()](https://redux.js.org/api/store#dispatchaction)
 
@@ -1019,7 +1019,7 @@ const store = createStore(( state = { count: 0 }, action ) => {
 // ...
 ```
 
-##### Organizando Actions
+#### Organizando Actions
 Ao invés chamar o `dispatch()` e passar uma função inline, é recomendado criar uma função que guardará a ação.
 
 ```JSX
@@ -1043,7 +1043,7 @@ store.dispatch(incrementarValor())
 ```
 
 
-#### subscribe() e getState()
+### subscribe() e getState()
 Para debugar e inserir uma ação a cada atualização, podemos usar os métodos `subscribe()` e `getState()`.
 - [subscribe()](https://redux.js.org/api/store#subscribelistener)
 - [getState()](https://redux.js.org/api/store#getState)
@@ -1081,6 +1081,110 @@ store.dispatch({
 
 ```
 
+### Reducer
+Reducer é uma função que _reduz um valor a outro_, de acordo com uma ação. Ela recebe, então, um estado inicial, uma ação e retorna um estado final.
+
+Já utilizamos um _reducer_ antes, que entrou como parâmetro do método `createStore()`.
+
+Os _reducers_ são funções que precisam seguir duas regras:
+
+- São funções puras, ou seja, elas retornam as mesmas variáveis que receberam (como parâmetro);
+- Não podem modificar o _state_ nem o _action_.
+
+#### combineReducers
+Não raramente, haverão mais de um _reducer_ em uma aplicação. Vamos levar em consideração os seguintes dados:
+```JSX
+const demoState = {
+  expenses: [{
+    id: '01',
+    description: 'January Rent',
+    note: 'Aluguel de janeiro',
+    amount: 54500,
+    createdAt: 0
+  }],
+  filters: {
+    text: 'rent',
+    sortBy: 'amount', // date ou amount
+    startDate: undefined,
+    endDate: undefined
+  }
+}
+```
+`expenses` lida com os gastos registrados e o `filters` lida com os filtros de busca. Existe uma gama de ações que serão criadas para cada um deles, por exemplo, adicionar despesa, deletar despesa, editar despesa, organizar por data, determinar data inicial, determinar data final etc.
+
+Para se ter um controle melhor dos estados, é recomendado separar em _reducers_ diferentes.
+
+
+```JSX
+
+const expenseReducerDefaultState = [];
+
+const filterReducerDefaultState = {
+  text: '',
+  sortBy: 'date',
+  startDate: undefined,
+  endDate: undefined
+};
+
+// quando o default fica muito complexo, é recomendado declarar seus valores em uma variável separada
+
+
+const expenseReducer = (state = expenseReducerDefaultState, action) => {
+  switch(action.type) {
+    default:
+      return state;
+  }
+}
+
+const filterReducer = (state = filterReducerDefaultState, action) => {
+  switch(action.type) {
+    default:
+      return state;
+  }
+}
+
+const store = createStore(
+  combineReducers({
+    expenses: expenseReducer,
+    filters: filterReducer
+  })
+)
+
+// ...
+```
+
+Agora, podemos inserir os _actions_ referentes a cada um dos _reducers_, por exemplo o de adicionar despesa.
+```JSX
+// ...
+
+const addExpense = ({
+  description: '',
+  note: '',
+  amount: 0,
+  createdAt: 0
+} = {}) => ({
+  type: 'ADD_EXPENSE',
+  id,
+  description,
+  note,
+  amount,
+  createdAt
+})
+
+const expenseReducer = (state = expenseReducerDefaultState, action) => {
+  switch(action.type) {
+    case 'ADD_EXPENSE':
+      return [
+        ...state,
+        action.expense
+      ]
+    default:
+      return state;
+  }
+}
+
+// ...
+```
 
 
 #### Glossário
