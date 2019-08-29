@@ -96,6 +96,8 @@ Adicionar os scripts do React: o pacote geral e o específico para manipulação
   - Production web server with Express
   - Deploying with Heroku
 
+- Extra: [ES6](#ES6)
+  - [Spread Operator](#Spread-Operator)
 
   -------
 
@@ -958,6 +960,8 @@ createStore(reducer, [preloadedState], [enhancer])
 
 Criamos a _store_, porém não há como fazer alterações ainda nos estados dentro dela. Para isso, definimos ações, ou _actions_. Declaramos essas ações dentro da store. Por convenção, o nome das ações são em letra maiúscula e as palavras são separadas por `_` (underscore).
 
+_Actions_ são objetos de Javascript e _Action Creators_ são os que criam essas _actions_, e são funções que retornam um objeto.
+
 
 ```JSX
 // ...
@@ -1081,19 +1085,95 @@ store.dispatch({
 
 ```
 
+#### Spread Operator e Editando Estados
+No uso de _states_ mais complexos, com mais propriedades, haverão momentos em que uma ação modificará somente um ou algumas propriedades. Para fazer isso de forma eficiente, podemos utilizar a notação [spread](#spread-operator).
+```JSX
+const editAction = (id, updates) => ({ // para editar um estado, precisamos de uma identificação e o que será modificado
+  type: 'EDIT_EXPENSE',
+  id,
+  updates
+})
+
+const reducerExpense = ((state = [], action) => {
+  case 'EDIT_EXPENSE':
+    if (state.id === action.id) { // checa se o estado atual é o mesmo do action
+      return {
+        ...state.expense, // recebe todas as propriedades da expense
+        ...actions.updates // sobrescreve as propriedades especificadas
+      }
+    }
+  default:
+    return state;
+})
+
+```
+
+#### Filtrando Estados
+
+
 
 
 #### Glossário
 ##### State
+No Redux, ele é um objeto, normalmente muito aninhado, que contém todos os _states_ da aplicação.
+
 ##### Action
 Objeto que representa a inteção de alterar um _state_. _Action_ é a única forma de alterar dados na _store_. _Actions_ precisam de uma propriedade `type` para indicar qual ação ocorrerá. É recomendado usar uma `String` para o `type`.
 
 _Actions_ são declaradas dentro da _store_, dentro do _reducing function_.
 
 ##### Reducer
-##### Dispatching Function
-##### Action Creator
+Função que define como as _actions_ vão agir. É uma função que recebe o estado inicial e a ação como parâmetro. Ela se chama _reducer_, porque ela recebe dois estados diferentes e uma ação e retorna apenas um estado.
 
+O _reducer_ é uma função que não modifica o estado, mas retorna uma versão atualizada dela.
+
+Caso a _action_ não seja conhecida, o _reducer_ deve retornar o estado atual (`default: return state`).
+
+##### Action Creator
+Função que criará um _action_. Essa é a única forma de **alterar um estado**.
+
+A função deve retornar um objeto, que é a _action_.
 
 ##### Store e Store Creator
 Objeto que que guarda o _state_ ou o _state tree_ da aplicação. Para criar uma _store_, é necessário chamar a função `createStore`, que recebe um _reducer_ como parâmetro. 
+
+
+---------------
+
+## ES6
+
+### Spread Operator
+Em Arrays e Objetos, podemos usar a notação `...` para chamar todos os itens ou propriedades para uma nova lista ou objeto. Por exemplo:
+
+```javascript
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1, 4, 5, 6]; // [1, 2, 3, 4, 5, 6]
+const arr3 = [-2, -1, 0, arr1]; // [-2, -1, 0, 1, 2, 3]
+
+const obj1 = {
+  name: "Mell",
+  age: 27
+}
+const obj2 = {
+  ...obj1,
+  local: "SP"
+} // { name: "Mell", age: 27, local: "SP" }
+```
+
+A notação de spread do objeto é recente, então é necessário a utilização do compilador Babel para fazer a "tradução" para navagadores mais antigos e outros frameworks.
+
+[Link para Spread Operator Babel](https://babeljs.io/docs/en/babel-plugin-proposal-object-rest-spread)
+
+**Instalação**
+```
+npm install --save-dev @babel/plugin-proposal-object-rest-spread
+```
+
+E no `.babelrc`, insira o código:
+```javascript
+{
+  "plugins": [
+    "transform-objects-rest-spread"
+  ]
+}
+```
